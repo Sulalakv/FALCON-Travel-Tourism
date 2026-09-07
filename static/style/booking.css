@@ -1,0 +1,215 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+    
+}
+body{
+    background: linear-gradient(rgb(152, 174, 183),rgb(11, 52, 70));
+}
+:root{
+  --max-width: 1200px;
+
+}
+
+.nav{
+    background-color: rgba(64, 224, 208,0.5);
+    /* background-color:rgba(33, 28, 28,0.5); */
+    /* border: 1px solid white; */
+
+    border-radius: 0 30px 0 30px;
+    inset: 1;
+    /* position: fixed;
+    left: 15%; */
+    position: relative;
+    top: 10%;
+    display: block;
+
+}
+header{
+    width: 1140px;
+    max-width: 80%;
+    margin: auto;
+    height: 140px;
+    top: 20px;
+    z-index: 100;
+    overflow: hidden;
+    /* border: 1px solid white; */
+}
+.head{
+    width: 1140px;
+    height:80px ;
+    background-color: rgba(0,0 , 0, 0.3);
+    display: flex;
+    position: fixed;
+    position: relative;   
+    text-align: center;
+    font-size: 25px;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 10px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+
+}
+.head h1{
+    color: white;
+    text-align: center;
+    position: relative;
+    top: 10px;
+    
+}
+#logo,.bgv{
+    position: relative;
+    left: 25vw;
+}
+.navigation{
+    position: fixed;
+    position: relative;
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* margin: 5px; */
+}
+.navigation ul{
+    display: flex;
+}
+.navigation ul li{
+    position: relative;
+    width: 100px;
+    height: 50px;
+    list-style: none;
+    z-index: 1;
+}
+.navigation ul li a{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+}
+.navigation ul li a .icon{
+    position: relative;
+    display: block;
+    line-height: 50px;
+    font-size: 1.5rem;
+    text-align: center;
+    color: #fff;
+    transition: .5s;
+}
+.navigation ul li:hover a .icon{
+    transform: translateY(-32px);
+}
+.navigation ul li a .test{
+    position: absolute;
+    color: #fff;
+    font-weight: 400;
+    font-size: .75em;
+    letter-spacing: .25em;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .5s;
+}
+.navigation ul li:hover a .test{
+    opacity: 1;
+    transform: translateY(10px);
+    
+}
+
+
+/*** Booking ***/
+.pstn{
+    position: relative;
+    top: 30%;
+    /* left: 0; */
+    
+}
+.booking {
+    background: linear-gradient(rgba(15, 23, 43, .7), rgba(15, 23, 43, .7)), url(../img/booking.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+/*** Footer ***/
+.footer .btn.btn-social {
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--light);
+    font-weight: normal;
+    border: 1px solid rgba(64, 224, 208);
+    border-radius: 35px;
+    transition: .3s;
+}
+
+.footer .btn.btn-social:hover {
+    color: var(--primary);
+}
+
+.footer .btn.btn-link {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0;
+    text-align: left;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: normal;
+    text-transform: capitalize;
+    transition: .3s;
+}
+
+.footer .btn.btn-link::before {
+    position: relative;
+    content: "\f105";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 10px;
+}
+
+.footer .btn.btn-link:hover {
+    letter-spacing: 1px;
+    box-shadow: none;
+}
+
+.footer .copyright {
+    padding: 25px 0;
+    font-size: 15px;
+    border-top: 1px solid rgba(256, 256, 256, .1);
+}
+
+.footer .copyright a {
+    color: var(--light);
+}
+
+.footer .footer-menu a {
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(255, 255, 255, .1);
+}
+
+.footer .footer-menu a:last-child {
+    margin-right: 0;
+    padding-right: 0;
+    border-right: none;
+}
+.ftr-btn button{
+    background-color: rgba(64, 224, 208);
+
+}
+.ftr-btn input{
+    border-color:rgba(64, 224, 208) ;
+}
+.ftr-h4 h4{
+    color: rgba(64, 224, 208);
+}
+
+  

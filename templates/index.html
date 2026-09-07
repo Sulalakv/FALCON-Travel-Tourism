@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Falcon Travel - Fly Over The World{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css">
+    <link rel="stylesheet" href="{% static 'style/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/min/tiny-slider.js"></script>
+{% endblock %}
+
+{% block content %}
+    <!-- sheet1 (Hero Video Banner) -->
+    <div class="sheet1">
+        <div class="back-video">
+            <video src="{% static 'public/Project 3.mp4' %}" class="video1" id="video1" autoplay muted></video>
+            <video src="{% static 'public/project2.mp4' %}" class="video2" id="video2" autoplay muted></video>
+            <video src="{% static 'public/Project 1.mp4' %}" class="video3" id="video3" autoplay muted></video>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="content">
+            <div class="webname">FALCON</div>
+            <div class="discription">Fly Over The World</div>
+            <h1>Visit <span class="changecontent"></span></h1>
+           
+            <div class="buttons">
+                <a href="{% url 'packages' %}" class="btn hero-btn-primary">See More</a>
+                <a href="{% url 'booking' %}" class="btn hero-btn-outline">Book Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- sheet2 (Search Form Section) -->
+    <div class="sheet2">
+        <div class="location">
+            <div class="box">
+                <div class="head2">
+                    <h3>Explore Now</h3>
+                    <h1>Find Your Destination</h1>
+                </div>
+
+                <div class="formwrapper">
+                    <form action="{% url 'home' %}#pakages" method="GET">
+                        <input type="text" name="where_to" placeholder="Where to?" class="form-control" value="{{ search_where_to }}">
+                        
+                        <select class="form-control" name="destination_select">
+                            <option value="destination">Destination</option>
+                            {% for dest in destinations %}
+                            <option value="{{ dest.name }}" {% if search_destination == dest.name %}selected{% endif %}>{{ dest.name }}</option>
+                            {% empty %}
+                            <option value="Greece">Greece</option>
+                            <option value="London">London</option>
+                            <option value="Maldives">Maldives</option>
+                            <option value="Paris">Paris</option>
+                            {% endfor %}
+                        </select>
+
+                        <select class="form-control" name="duration">
+                            <option value="duration">Duration</option>
+                            <option value="day-1" {% if search_duration == 'day-1' %}selected{% endif %}>1- Day Tour</option>
+                            <option value="2-4 days" {% if search_duration == '2-4 days' %}selected{% endif %}>2-4 Days Tour</option>
+                            <option value="5-7 days" {% if search_duration == '5-7 days' %}selected{% endif %}>5-7 Days Tour</option>
+                            <option value="7+ days" {% if search_duration == '7+ days' %}selected{% endif %}>7+ Days</option>
+                        </select>
+                        <button type="submit" class="btn2">Search Now</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- sheet3 (Packages List/Slider) -->
+    <div class="sheet3" id="pakages">
+        <section id="slider">
+            <div class="slider-wrapper">
+                <h1>{% if is_searched %}SEARCH RESULTS{% else %}BEST PACKAGES FOR YOU{% endif %}</h1>
+                <div class="my-slider-wrapper">
+                    <div class="my-slider">
+                        {% for package in packages %}
+                        <div>
+                            <div class="slide">
+                                <div class="slide-img" style="background-image: url('{{ package.get_image_url }}');">
+                                    <a href="{% url 'booking' %}?dest={{ package.destination.id }}">Book Now</a>
+                                </div>
+                                <div class="des">
+                                    <div>
+                                        <h3>{{ package.title }}</h3>
+                                        <p>{{ package.description|truncatewords:10 }}</p>
+                                    </div>
+                                    <h4><i class="fa-solid fa-location-dot"></i> {{ package.location }} (${{ package.price }})</h4>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div>
+                            <div class="slide text-center text-white p-5" style="background: rgba(11,52,70,0.8);">
+                                <h3>No Packages Found</h3>
+                                <p>Try refining your search keyword or destination.</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- sheet4 (Popular Destinations Carousel) -->
+    <div class="sheet4">
+        <section class="destination" id="s4">
+            <h2>Popular Destinations</h2>
+            <div class="s4__container">
+                <div class="s4__data">
+                    <h1 class="s4__title">
+                        Browse &<br>
+                        Plan Your Trip
+                    </h1>
+
+                    <p class="s4__description">
+                        Find The Best Popular Destinations,<br>
+                        Explore hundreds of packages, <br>Take
+                        Advantage Of 50% discount offers <br> and much more
+                    </p>
+                    <a href="{% url 'booking' %}" class="s4__btn">Book Now</a>
+                </div>
+
+                <div class="s4__images">
+                    <div class="s4__swiper swiper">
+                        <div class="swiper-wrapper">
+                            {% for dest in popular_destinations %}
+                            <article class="s4__article swiper-slide">
+                                <img src="{{ dest.image_url }}" alt="{{ dest.name }}" class="s4__img">
+                            </article>
+                            {% empty %}
+                            <article class="s4__article swiper-slide">
+                                <img src="{% static 'public/australia.jpg' %}" alt="Australia" class="s4__img">
+                            </article>
+                            <article class="s4__article swiper-slide">
+                                <img src="{% static 'public/bangkok.jpg' %}" alt="Bangkok" class="s4__img">
+                            </article>
+                            <article class="s4__article swiper-slide">
+                                <img src="{% static 'public/istanbul 1.jpg' %}" alt="Istanbul" class="s4__img">
+                            </article>
+                            <article class="s4__article swiper-slide">
+                                <img src="{% static 'public/thailand.jpg' %}" alt="Thailand" class="s4__img">
+                            </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- sheet5 (3D Cube & Gallery) -->
+    <div class="sheet5" id="gallary">
+        <h1 id="gallary-hd">PHOTO & DESTINATION GALLERY</h1>
+       
+        <div class="center">
+            <input type="radio" checked name="active" id="tab-1">
+            <input type="radio" name="active" id="tab-2">
+            <input type="radio" name="active" id="tab-3">
+            <input type="radio" name="active" id="tab-4">
+
+            <div class="s5-imgcard">
+                <img src="{% static 'public/box1.jpg' %}" alt="Gallery 1">
+                <img src="{% static 'public/box2.jpg' %}" alt="Gallery 2">
+                <img src="{% static 'public/box3.jpg' %}" alt="Gallery 3">
+                <img src="{% static 'public/box4.jpg' %}" alt="Gallery 4">
+            </div>
+
+            <div class="s5-sliders">
+                <label for="tab-1"><img src="{% static 'public/box1.jpg' %}" alt="Gallery Slider 1"></label>
+                <label for="tab-2"><img src="{% static 'public/box2.jpg' %}" alt="Gallery Slider 2"></label>
+                <label for="tab-3"><img src="{% static 'public/box3.jpg' %}" alt="Gallery Slider 3"></label>
+                <label for="tab-4"><img src="{% static 'public/box4.jpg' %}" alt="Gallery Slider 4"></label>
+            </div>
+        </div>
+        
+        <div class="s5-wrapper">
+            <img src="{% static 'public/p1.jpg' %}" alt="Destination Photo 1" class="img-wrapp">
+            <img src="{% static 'public/p21.jpg' %}" alt="Destination Photo 2" class="img-wrapp">
+            <img src="{% static 'public/p31.jpg' %}" alt="Destination Photo 3" class="img-wrapp">
+            <img src="{% static 'public/p4.jpg' %}" alt="Destination Photo 4" class="img-wrapp">
+            <img src="{% static 'public/p5.jpg' %}" alt="Destination Photo 5" class="img-wrapp">
+            <img src="{% static 'public/p6.jpg' %}" alt="Destination Photo 6" class="img-wrapp">
+            <img src="{% static 'public/p7.jpg' %}" alt="Destination Photo 7" class="img-wrapp">
+            <img src="{% static 'public/p8.jpg' %}" alt="Destination Photo 8" class="img-wrapp">
+            <img src="{% static 'public/p9.jpg' %}" alt="Destination Photo 9" class="img-wrapp">
+            <img src="{% static 'public/p10.jpg' %}" alt="Destination Photo 10" class="img-wrapp">
+        </div>
+    </div>
+
+    <!-- sheet6 (Services) -->
+    <div class="sheet6">
+        <div class="service">
+            <h1>Our Services</h1>
+            <div class="service-box">
+                {% for service in services %}
+                <div class="service-card">
+                    <img src="{{ service.image_url }}" alt="{{ service.title }}">
+                    <div class="service-dtls">
+                        <h1>{{ service.title }}</h1>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="service-card">
+                    <img src="{% static 'public/service-1.jpg' %}" alt="cruise tickets">
+                    <div class="service-dtls">
+                        <h1>Cruise Ticket</h1>
+                        <p>Enjoy world-class amenities and stunning views with Falcon cruise. Book your cruise now.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <img src="{% static 'public/service-2.jpg' %}" alt="car booking">
+                    <div class="service-dtls">
+                        <h1>Car Booking</h1>
+                        <p>Affordable rates, no hidden costs. Best rental deals today.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Section -->
+    <div class="container-xxl py-5 process">
+        <div class="container">
+            <div class="text-center pb-4 wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center process-clr px-3">Process</h6>
+                <h1 class="mb-5 display-5 fw-bold text-dark">3 Easy Steps</h1>
+            </div>
+            <div class="row gy-5 gx-4 justify-content-center">
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative border pt-5 pb-4 px-4 bg-white rounded shadow-sm">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-clr rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 90px; height: 90px;">
+                            <i class="fa fa-globe fa-2x text-white"></i>
+                        </div>
+                        <h5 class="mt-4 fw-bold">Choose A Destination</h5>
+                        <hr class="w-25 mx-auto bg-clr mb-1">
+                        <hr class="w-50 mx-auto bg-clr mt-0">
+                        <p class="mb-0 text-muted">Find and pick the ultimate spots, with high grade packages tailored to support your exact requirements.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="position-relative border bdr-clr pt-5 pb-4 px-4 bg-white rounded shadow-sm">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-clr rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 90px; height: 90px;">
+                            <i class="fa fa-dollar-sign fa-2x text-white"></i>
+                        </div>
+                        <h5 class="mt-4 fw-bold">Pay Online</h5>
+                        <hr class="w-25 mx-auto bg-clr mb-1">
+                        <hr class="w-50 mx-auto bg-clr mt-0">
+                        <p class="mb-0 text-muted">Secure and fast payment gateways that allow checkout processing with full privacy features built-in.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="position-relative border bdr-clr pt-5 pb-4 px-4 bg-white rounded shadow-sm">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-clr rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 90px; height: 90px;">
+                            <i class="fa fa-plane fa-2x text-white"></i>
+                        </div>
+                        <h5 class="mt-4 fw-bold">Fly Today</h5>
+                        <hr class="w-25 mx-auto bg-clr mb-1">
+                        <hr class="w-50 mx-auto bg-clr mt-0">
+                        <p class="mb-0 text-muted">Complete your onboarding, get air tickets right in your inbox and start exploring the world immediately.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Start -->
+    <div class="container-xxl py-5 team">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center process-clr px-3">Travel Guide</h6>
+                <h1 class="mb-5 display-5 fw-bold text-dark">Meet Our Guides</h1>
+            </div>
+            <div class="row g-4">
+                {% for guide in guides %}
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item bg-white rounded overflow-hidden shadow-sm">
+                        <div class="overflow-hidden" style="height: 260px;">
+                            <img class="img-fluid w-100 h-100" src="{{ guide.image_url }}" alt="{{ guide.name }}" style="object-fit: cover;">
+                        </div>
+                        <div class="position-relative d-flex justify-content-center" style="margin-top: -19px;">
+                            <a class="btn btn-square mx-1" href="{{ guide.facebook|default:'#' }}"><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-square mx-1" href="{{ guide.twitter|default:'#' }}"><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-square mx-1" href="{{ guide.instagram|default:'#' }}"><i class="fab fa-instagram"></i></a>
+                        </div>
+                        <div class="text-center p-4">
+                            <h5 class="mb-1 fw-bold">{{ guide.name }}</h5>
+                            <small class="text-muted fw-bold">{{ guide.role }}</small>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="team-item p-4 text-center">
+                        <h5>John Doe</h5>
+                        <small>Senior Expedition Coordinator</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Team End -->
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'style/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'app.js' %}"></script>
+{% endblock %}

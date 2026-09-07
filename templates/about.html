@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - FALCON{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'style/about.css' %}">
+    <style>
+        .about-hero {
+            padding: 120px 0 60px 0;
+            background: linear-gradient(135deg, #0b3446 0%, #1d83ae 100%);
+        }
+
+        .ab-textclr {
+            color: rgba(64, 224, 208, 1) !important;
+        }
+
+        .btn-abt {
+            background-color: rgba(64, 224, 208, 1);
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 30px;
+            padding: 12px 35px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-abt:hover {
+            background-color: #2ebaa8;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="about-hero">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6">
+                    <div class="position-relative overflow-hidden rounded-4 shadow-lg" style="min-height: 400px;">
+                        <img class="img-fluid w-100 h-100" src="{% static 'img/about.jpg' %}" alt="About Falcon" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 text-white">
+                    <h6 class="text-info text-uppercase fw-bold tracking-wide">ABOUT US</h6>
+                    <h1 class="mb-4 display-5 fw-bold text-white">Welcome to <span class="ab-textclr">Falcon Travel</span></h1>
+                    <p class="mb-4 text-light lead">We are dedicated to providing the ultimate tourism and adventure planning service, connecting you with incredible destinations globally. Our experts coordinate top-tier travel logs, handpicked hotel bundles, and guided itineraries.</p>
+                    <p class="mb-4 text-light-50">Whether you are planning a relaxed cruise getaway, a multi-day heritage tour, or seeking direct flight booking coordinates, Falcon assures a seamless experience from onboarding to takeoff.</p>
+
+                    <div class="row gy-3 gx-4 mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>First Class Flights</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>Handpicked Hotels</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>5 Star Accommodations</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>Latest Model Vehicles</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>150 Premium City Tours</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0 text-light"><i class="fa fa-arrow-right ab-textclr me-2"></i>24/7 Dedicated Support</p>
+                        </div>
+                    </div>
+                    <a class="btn btn-abt shadow" href="{% url 'packages' %}">Explore Packages</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team / Guides Section -->
+    <div class="py-5" style="background: #ffffff;">
+        <div class="container py-4">
+            <div class="text-center mb-5">
+                <h6 class="text-info fw-bold text-uppercase">OUR TEAM</h6>
+                <h1 class="display-5 fw-bold text-dark">Meet Our Expedition Leaders</h1>
+            </div>
+            <div class="row g-4">
+                {% for guide in guides %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="card border-0 shadow-sm rounded-3 overflow-hidden text-center h-100">
+                        <div class="overflow-hidden" style="height: 250px;">
+                            <img src="{{ guide.image_url }}" class="card-img-top w-100 h-100" alt="{{ guide.name }}" style="object-fit: cover;">
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-1">{{ guide.name }}</h5>
+                            <p class="text-muted small fw-bold mb-0">{{ guide.role }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-lg-3">
+                    <div class="p-3 border text-center">
+                        <h5>John Doe</h5>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

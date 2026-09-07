@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cancel Booking - Falcon Travel{% endblock %}
+
+{% block content %}
+<div class="py-5" style="padding-top: 150px !important; min-height: 80vh; background: #f4f6f9;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white text-center">
+                    <div class="text-danger mb-3">
+                        <i class="fa-solid fa-triangle-exclamation fa-3x"></i>
+                    </div>
+                    <h3 class="fw-bold mb-2" style="color: #0b3446;">Cancel Reservation</h3>
+                    <p class="text-muted mb-4">Are you sure you want to cancel booking <strong>#{{ booking.booking_code }}</strong> for <strong>{{ booking.package.title|default:booking.destination.name }}</strong>?</p>
+
+                    <div class="bg-light p-3 rounded-3 mb-4 text-start small">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Travel Date:</span>
+                            <span class="fw-bold">{{ booking.date_time }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-muted">Guests:</span>
+                            <span class="fw-bold">{{ booking.num_guests }} Person(s)</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Total Price:</span>
+                            <span class="fw-bold text-success">${{ booking.total_price }}</span>
+                        </div>
+                    </div>
+
+                    <form action="{% url 'cancel_booking' booking.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-4 text-start">
+                            <label class="form-label fw-bold small text-muted">Reason for Cancellation (Optional)</label>
+                            <textarea name="cancellation_reason" class="form-control" rows="2" placeholder="Tell us why you are cancelling..."></textarea>
+                        </div>
+
+                        <div class="d-flex gap-3 justify-content-center">
+                            <a href="{% url 'my_bookings' %}" class="btn btn-light rounded-pill px-4 fw-bold border">
+                                Keep Booking
+                            </a>
+                            <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold">
+                                Confirm Cancellation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

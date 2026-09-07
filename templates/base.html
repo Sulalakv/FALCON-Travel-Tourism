@@ -1,0 +1,556 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FALCON - Fly Over The World{% endblock %}</title>
+
+    <!-- icons stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'style/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Global Base CSS containing common adjustments -->
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Ensure Django messages block looks neat and floating */
+        .django-messages {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 99999;
+            min-width: 300px;
+            max-width: 90vw;
+        }
+        
+        /* Modern Header Container */
+        .clr-box {
+            position: relative;
+            z-index: 10000;
+            width: 100%;
+        }
+
+        .header-wrapper {
+            position: fixed;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(11, 52, 70, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(64, 224, 208, 0.4);
+            border-radius: 40px;
+            padding: 10px 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            z-index: 10000;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-logo img {
+            width: 50px;
+            height: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .brand-logo h1 {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-menu li {
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a i {
+            font-size: 1.1rem;
+            color: rgba(64, 224, 208, 1);
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: rgba(64, 224, 208, 0.25);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Hamburger Toggle */
+        .nav-toggle-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        @media screen and (max-width: 991px) {
+            .nav-toggle-btn {
+                display: block;
+            }
+
+            .nav-menu {
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(11, 52, 70, 0.95);
+                backdrop-filter: blur(15px);
+                border: 1px solid rgba(64, 224, 208, 0.3);
+                border-radius: 20px;
+                flex-direction: column;
+                padding: 20px;
+                gap: 12px;
+                display: none;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            }
+
+            .nav-menu.show {
+                display: flex;
+            }
+
+            .nav-menu a {
+                width: 100%;
+                justify-content: flex-start;
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            .header-wrapper {
+                width: 95%;
+                padding: 10px 20px;
+            }
+        }
+
+        /* ==========================================
+           UNIVERSAL SOLID FOOTER STYLES
+           ========================================== */
+        .footer-section, 
+        .bg-dark-theme,
+        .footer {
+            background-color: #07222e !important;
+            color: #ffffff !important;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-heading {
+            color: #40e0d0 !important;
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .footer .btn.btn-link,
+        .footer-link {
+            display: block;
+            color: rgba(255, 255, 255, 0.85) !important;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer .btn.btn-link:hover,
+        .footer-link:hover {
+            color: #40e0d0 !important;
+            padding-left: 6px;
+        }
+
+        .footer .btn-social,
+        .footer .btn.btn-social {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid rgba(64, 224, 208, 0.5);
+            color: #ffffff !important;
+            margin-right: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .footer .btn-social:hover,
+        .footer .btn.btn-social:hover {
+            background-color: #40e0d0 !important;
+            color: #07222e !important;
+            border-color: #40e0d0 !important;
+            transform: translateY(-3px);
+        }
+
+        .footer-gallery-img {
+            height: 65px;
+            width: 100%;
+            object-fit: cover;
+            border: 1px solid rgba(64, 224, 208, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .footer-gallery-img:hover {
+            transform: scale(1.08);
+        }
+
+        .footer-newsletter-input,
+        .ftr-btn input {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            color: #111111 !important;
+            border-radius: 30px !important;
+            border: 1px solid rgba(64, 224, 208, 0.5) !important;
+            font-size: 0.95rem;
+        }
+
+        .footer-newsletter-btn,
+        .ftr-btn button {
+            background-color: #40e0d0 !important;
+            color: #07222e !important;
+            font-weight: 700 !important;
+            border-radius: 25px !important;
+            padding: 8px 22px !important;
+            border: none !important;
+        }
+
+        .footer-newsletter-btn:hover,
+        .ftr-btn button:hover {
+            background-color: #ffffff !important;
+            color: #07222e !important;
+        }
+
+        .footer-menu a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-menu a:hover {
+            color: #40e0d0;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Django Messages Framework -->
+    {% if messages %}
+    <div class="django-messages">
+        {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show shadow-lg" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i> {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Header Navigation -->
+    <div class="clr-box">
+        <div class="header-wrapper">
+            <div class="header-container">
+                <a href="{% url 'home' %}" class="brand-logo">
+                    <img src="{% static 'public/falcon2-removebg-preview (1).png' %}" alt="Falcon Logo">
+                    <h1>FALCON</h1>
+                </a>
+
+                <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars" id="toggleIcon"></i>
+                </button>
+
+                <ul class="nav-menu" id="navMenu">
+                    <li>
+                        <a href="{% url 'home' %}">
+                            <i class="fa-solid fa-house"></i>
+                            <span>HOME</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'packages' %}">
+                            <i class="fa-solid fa-box-open"></i>
+                            <span>PACKAGES</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'home' %}#gallary">
+                            <i class="fa-solid fa-image"></i>
+                            <span>GALLERY</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'about' %}">
+                            <i class="fa-solid fa-address-card"></i>
+                            <span>ABOUT US</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'booking' %}">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span>BOOKING</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contact' %}">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>CONTACT</span>
+                        </a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a href="#" class="dropdown-toggle" id="userMenuDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="background: rgba(64, 224, 208, 0.2); border: 1px solid rgba(64, 224, 208, 0.5);">
+                            <i class="fa-solid fa-user-astronaut text-info"></i>
+                            <span>{{ request.user.first_name|default:request.user.username|upper }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg py-2" aria-labelledby="userMenuDropdown" style="background: rgba(7, 34, 46, 0.95); backdrop-filter: blur(15px); border: 1px solid rgba(64, 224, 208, 0.4); border-radius: 16px; min-width: 180px;">
+                            <li>
+                                <a class="dropdown-item text-white py-2 d-flex align-items-center" href="{% url 'my_bookings' %}">
+                                    <i class="fa-solid fa-suitcase-rolling me-2 text-info"></i>My Bookings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-white py-2 d-flex align-items-center" href="{% url 'profile' %}">
+                                    <i class="fa-solid fa-id-card me-2 text-info"></i>Profile
+                                </a>
+                            </li>
+                            {% if request.user.is_staff %}
+                            <li>
+                                <a class="dropdown-item text-white py-2 d-flex align-items-center" href="/admin/" target="_blank">
+                                    <i class="fa-solid fa-shield-halved me-2 text-warning"></i>Admin Portal
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider border-secondary my-1"></li>
+                            <li>
+                                <a class="dropdown-item text-danger py-2 d-flex align-items-center" href="{% url 'logout' %}">
+                                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'login' %}" style="background: rgba(64, 224, 208, 0.25); border: 1px solid rgba(64, 224, 208, 0.5);">
+                            <i class="fa-solid fa-right-to-bracket text-info"></i>
+                            <span>SIGN IN</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5">
+        <div class="container py-5">
+            <div class="ftr-h4 row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="mb-3">Company</h4>
+                    <a class="btn btn-link" href="{% url 'about' %}">About Us</a>
+                    <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
+                    <a class="btn btn-link" href="{% url 'packages' %}">Packages</a>
+                    <a class="btn btn-link" href="{% url 'booking' %}">Booking</a>
+                    <a class="btn btn-link" href="{% url 'home' %}#gallary">Gallery</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="mb-3">Contact</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Falcon Way, New York, USA</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+1 800 555 0199</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@falcon-travel.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="mb-3">Gallery</h4>
+                    <div class="row g-2 pt-2">
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'img/package-1.jpg' %}" alt="Gallery 1">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'img/package-2.jpg' %}" alt="Gallery 2">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'img/package-3.jpg' %}" alt="Gallery 3">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'public/box1.jpg' %}" alt="Gallery 4">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'public/box2.jpg' %}" alt="Gallery 5">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1 rounded" src="{% static 'public/box3.jpg' %}" alt="Gallery 6">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="mb-3">Newsletter</h4>
+                    <p>Subscribe to our newsletter for latest updates and special travel offers.</p>
+                    <form action="{% url 'newsletter_subscribe' %}" method="POST" class="ftr-btn position-relative mx-auto" style="max-width: 400px;">
+                        {% csrf_token %}
+                        <input class="form-control w-100 py-3 ps-4 pe-5" type="email" name="email" placeholder="Your email" required>
+                        <button type="submit" class="btn py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom text-white" href="{% url 'home' %}">Falcon Travel</a>, All Rights Reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="{% url 'home' %}">Home</a>
+                            <a href="{% url 'about' %}">About Us</a>
+                            <a href="{% url 'booking' %}">Booking</a>
+                            <a href="{% url 'contact' %}">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="top">
+            <a href="#" class="btn btn-lg btn-lg-square back-to-top shadow"><i class="bi bi-arrow-up"></i></a>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+    <!-- Global Navigation & Utilities Script -->
+    <script>
+        $(document).ready(function() {
+            // Mobile Menu Toggle
+            const navToggleBtn = document.getElementById('navToggleBtn');
+            const navMenu = document.getElementById('navMenu');
+            const toggleIcon = document.getElementById('toggleIcon');
+
+            if (navToggleBtn && navMenu) {
+                navToggleBtn.addEventListener('click', function() {
+                    navMenu.classList.toggle('show');
+                    if (navMenu.classList.contains('show')) {
+                        toggleIcon.classList.remove('fa-bars');
+                        toggleIcon.classList.add('fa-xmark');
+                    } else {
+                        toggleIcon.classList.remove('fa-xmark');
+                        toggleIcon.classList.add('fa-bars');
+                    }
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!navToggleBtn.contains(event.target) && !navMenu.contains(event.target)) {
+                        navMenu.classList.remove('show');
+                        if (toggleIcon) {
+                            toggleIcon.classList.remove('fa-xmark');
+                            toggleIcon.classList.add('fa-bars');
+                        }
+                    }
+                });
+            }
+
+            // Back to top scroll button
+            $(window).scroll(function () {
+                if ($(this).scrollTop() > 300) {
+                    $('.back-to-top').fadeIn('slow');
+                } else {
+                    $('.back-to-top').fadeOut('slow');
+                }
+            });
+            $('.back-to-top').click(function () {
+                $('html, body').animate({scrollTop: 0}, 1200, 'easeInOutExpo');
+                return false;
+            });
+
+            // Autoclose Django message alerts
+            setTimeout(function() {
+                $('.django-messages .alert').fadeOut('slow', function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+

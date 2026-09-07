@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: falcon-travel-tourism
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn travel_agency.wsgi:application --log-file -"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "falcon-travel-tourism.onrender.com"

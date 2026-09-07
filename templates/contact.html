@@ -1,0 +1,433 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - Falcon Travel{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Contact Page Custom Theme Styles */
+    .contact-hero-banner {
+        padding: 140px 0 60px 0;
+        background: linear-gradient(135deg, #07222e 0%, #0b3446 60%, #154b63 100%);
+        text-align: center;
+        color: #ffffff;
+        position: relative;
+    }
+
+    .contact-hero-banner::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 30px;
+        background: linear-gradient(to bottom, transparent, #f4f6f9);
+    }
+
+    .contact-hero-badge {
+        display: inline-block;
+        color: #40e0d0;
+        font-weight: 700;
+        font-size: 0.9rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .contact-hero-title {
+        font-size: clamp(2rem, 4.5vw, 3rem);
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 15px;
+    }
+
+    .contact-hero-desc {
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 1.05rem;
+        max-width: 680px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+
+    .contact-body-bg {
+        background-color: #f4f6f9;
+        padding-bottom: 80px;
+    }
+
+    /* Badges */
+    .contact-badge-item {
+        background: #ffffff;
+        border-radius: 15px;
+        padding: 22px 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.04);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        height: 100%;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-badge-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .contact-badge-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        background: rgba(64, 224, 208, 0.15);
+        color: #1d83ae;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.35rem;
+    }
+
+    /* Left Information Panel Card */
+    .contact-info-card {
+        background: linear-gradient(145deg, #07222e 0%, #0b3446 60%, #154b63 100%);
+        border-radius: 20px;
+        padding: 40px 35px;
+        color: #ffffff;
+        height: 100%;
+        box-shadow: 0 15px 35px rgba(11, 52, 70, 0.25);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .contact-info-card h3 {
+        color: #40e0d0;
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .contact-detail-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .contact-detail-row i {
+        font-size: 1.3rem;
+        color: #40e0d0;
+        margin-top: 4px;
+        width: 24px;
+        text-align: center;
+    }
+
+    .contact-detail-row h6 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 2px;
+    }
+
+    .contact-detail-row p {
+        font-size: 0.98rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+    }
+
+    .contact-social-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        border: 1px solid rgba(64, 224, 208, 0.4);
+        margin-right: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .contact-social-btn:hover {
+        background: #40e0d0;
+        color: #07222e !important;
+        transform: translateY(-3px);
+    }
+
+    /* Right Form Card */
+    .contact-form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 40px 35px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 100%;
+    }
+
+    .contact-form-card h3 {
+        color: #0b3446;
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 6px;
+    }
+
+    .contact-form-card .form-group {
+        margin-bottom: 20px;
+    }
+
+    .contact-form-card label {
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: #0b3446;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .contact-form-card .input,
+    .contact-form-card input,
+    .contact-form-card textarea {
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 10px;
+        border: 1.5px solid #d1d5db;
+        background-color: #f9fafb;
+        color: #111827;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .contact-form-card textarea.input,
+    .contact-form-card textarea {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .contact-form-card .input:focus,
+    .contact-form-card input:focus,
+    .contact-form-card textarea:focus {
+        border-color: #1d83ae;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(29, 131, 174, 0.15);
+    }
+
+    .contact-submit-btn {
+        background: linear-gradient(135deg, #1d83ae 0%, #0b3446 100%);
+        color: #ffffff !important;
+        font-weight: 700;
+        font-size: 1.05rem;
+        padding: 14px 28px;
+        border-radius: 10px;
+        border: none;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(11, 52, 70, 0.25);
+    }
+
+    .contact-submit-btn:hover {
+        background: linear-gradient(135deg, #0b3446 0%, #1d83ae 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgba(11, 52, 70, 0.35);
+    }
+
+    /* Map Card */
+    .contact-map-wrapper {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 380px;
+        background: #ffffff;
+    }
+
+    .contact-map-wrapper iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Banner -->
+    <div class="contact-hero-banner">
+        <div class="container">
+            <span class="contact-hero-badge">Get In Touch</span>
+            <h1 class="contact-hero-title">Contact Our Travel Specialists</h1>
+            <p class="contact-hero-desc">We are here to assist with custom itinerary planning, cruise bookings, visa support, and round-the-clock emergency travel assistance.</p>
+        </div>
+    </div>
+
+    <!-- Main Content Body -->
+    <div class="contact-body-bg">
+        <div class="container">
+            <!-- 4 Badges Row -->
+            <div class="row g-4 mb-5 pt-4">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="contact-badge-item">
+                        <div class="contact-badge-icon">
+                            <i class="fa-solid fa-headset"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color: #0b3446;">24/7 Global Support</h6>
+                            <small class="text-muted">Instant assistance anytime</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="contact-badge-item">
+                        <div class="contact-badge-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color: #0b3446;">Secure & Verified</h6>
+                            <small class="text-muted">Encrypted communication</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="contact-badge-item">
+                        <div class="contact-badge-icon">
+                            <i class="fa-solid fa-plane-departure"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color: #0b3446;">Expert Tour Guides</h6>
+                            <small class="text-muted">Tailored travel bundles</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6">
+                    <div class="contact-badge-item">
+                        <div class="contact-badge-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color: #0b3446;">Fast Response</h6>
+                            <small class="text-muted">Replies within 2 hours</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Split Form & Details Row -->
+            <div class="row g-4 mb-5">
+                <!-- Left Info Column -->
+                <div class="col-lg-5">
+                    <div class="contact-info-card">
+                        <div>
+                            <h3>Let's Connect</h3>
+                            <p class="text-white-50 mb-4">Have questions regarding an upcoming booking or want a tailored holiday package? Reach out through any of our channels.</p>
+
+                            <div class="contact-detail-row">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <h6>Headquarters</h6>
+                                    <p>123 Falcon Way, Suite 400, New York, NY 10001, USA</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-detail-row">
+                                <i class="fa-solid fa-phone-volume"></i>
+                                <div>
+                                    <h6>Toll-Free Phone</h6>
+                                    <p>+1 800 555 0199 / +1 212 555 0188</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-detail-row">
+                                <i class="fa-solid fa-envelope-open-text"></i>
+                                <div>
+                                    <h6>Email Inquiries</h6>
+                                    <p>support@falcon-travel.com</p>
+                                </div>
+                            </div>
+
+                            <div class="contact-detail-row">
+                                <i class="fa-solid fa-clock"></i>
+                                <div>
+                                    <h6>Office Hours</h6>
+                                    <p>Mon - Sat: 8:00 AM – 9:00 PM (EST)</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-top border-secondary">
+                            <p class="text-white-50 small mb-2">Follow Us Online</p>
+                            <div>
+                                <a href="#" class="contact-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="contact-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="contact-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="contact-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Form Column -->
+                <div class="col-lg-7">
+                    <div class="contact-form-card">
+                        <h3>Send Us A Message</h3>
+                        <p class="text-muted mb-4">Fill out the form below and our team will get in touch promptly.</p>
+
+                        <form action="{% url 'contact' %}" method="POST" autocomplete="off">
+                            {% csrf_token %}
+
+                            <div class="form-group">
+                                <label for="id_name"><i class="fa-regular fa-user me-2 text-info"></i>Your Name</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <small class="text-danger mt-1 d-block">{{ form.name.errors|striptags }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_email"><i class="fa-regular fa-envelope me-2 text-info"></i>Your Email</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <small class="text-danger mt-1 d-block">{{ form.email.errors|striptags }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_phone"><i class="fa-solid fa-phone me-2 text-info"></i>Phone Number</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                <small class="text-danger mt-1 d-block">{{ form.phone.errors|striptags }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="id_message"><i class="fa-regular fa-comment-dots me-2 text-info"></i>Your Message</label>
+                                {{ form.message }}
+                                {% if form.message.errors %}
+                                <small class="text-danger mt-1 d-block">{{ form.message.errors|striptags }}</small>
+                                {% endif %}
+                            </div>
+
+                            <button type="submit" class="contact-submit-btn">
+                                <i class="fa-regular fa-paper-plane me-2"></i>Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="text-center mb-4">
+                        <span class="text-info text-uppercase fw-bold" style="letter-spacing: 2px;">Find Our Location</span>
+                        <h2 class="fw-bold" style="color: #0b3446;">Visit Falcon Travel Headquarters</h2>
+                    </div>
+                    <div class="contact-map-wrapper">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.2527999175!2d-74.14448744570072!3d40.69763123339775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2susa!4v1690000000000!5m2!1sen!2susa" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

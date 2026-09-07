@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Book A Tour - Falcon Travel{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'style/booking.css' %}">
+    <style>
+        .booking-hero {
+            padding: 140px 0 80px 0;
+            background: linear-gradient(135deg, #07222e 0%, #0b3446 60%, #154b63 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .booking-card-wrapper {
+            background: rgba(11, 52, 70, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(64, 224, 208, 0.35);
+            border-radius: 26px;
+            padding: 45px 40px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            color: #ffffff;
+        }
+
+        .booking-card-wrapper label {
+            color: rgba(255, 255, 255, 0.85) !important;
+        }
+
+        .booking-card-wrapper select option {
+            background-color: #0b3446;
+            color: #ffffff;
+        }
+
+        .price-calculator-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px dashed rgba(64, 224, 208, 0.5);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .price-highlight {
+            color: #40e0d0;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .slot-indicator {
+            font-size: 0.85rem;
+            color: #40e0d0;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="booking-hero">
+    <div class="container">
+        <div class="booking-card-wrapper">
+            <div class="row g-5 align-items-center">
+                <!-- Left Details -->
+                <div class="col-lg-5 text-white">
+                    <h6 class="text-info text-uppercase fw-bold tracking-wide" style="color: #40e0d0 !important;">ONLINE RESERVATION</h6>
+                    <h1 class="text-white display-5 fw-bold mb-3">Book Your Next Adventure</h1>
+                    <p class="mb-4 text-light lead" style="font-size: 1.05rem;">Select your package or destination, specify the number of travelers, and receive prompt instant reservation confirmation.</p>
+                    
+                    <div class="price-calculator-card">
+                        <h6 class="text-white-50 text-uppercase fw-bold small mb-2">Estimated Total Price</h6>
+                        <div class="d-flex justify-content-between align-items-baseline mb-1">
+                            <span class="price-highlight" id="livePriceDisplay">$450.00</span>
+                            <span class="slot-indicator" id="liveSlotsDisplay"><i class="fa-solid fa-chair me-1"></i>Seats Available</span>
+                        </div>
+                        <small class="text-white-50" id="livePriceBreakdown">Base price $450 x 1 traveler</small>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-4 mt-4">
+                        <div>
+                            <h3 class="fw-bold mb-0" style="color: #40e0d0;">24/7</h3>
+                            <small class="text-light">Customer Support</small>
+                        </div>
+                        <div class="vr bg-light opacity-50" style="height: 40px;"></div>
+                        <div>
+                            <h3 class="fw-bold mb-0" style="color: #40e0d0;">100%</h3>
+                            <small class="text-light">Instant Confirmation</small>
+                        </div>
+                        <div class="vr bg-light opacity-50" style="height: 40px;"></div>
+                        <div>
+                            <h3 class="fw-bold mb-0" style="color: #40e0d0;">Safe</h3>
+                            <small class="text-light">Free Cancellation</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Form -->
+                <div class="col-lg-7">
+                    <div class="p-2">
+                        <h2 class="text-white fw-bold mb-4 text-center text-lg-start">Reservation Details</h2>
+                        
+                        <!-- Django Booking Form -->
+                        <form method="POST" action="{% url 'booking' %}" id="bookingForm">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form.name }}
+                                        <label for="name">Full Name</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.name.errors }}</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form.email }}
+                                        <label for="email">Email Address</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.email.errors }}</small>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form.package }}
+                                        <label for="packageSelect">Select Package</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.package.errors }}</small>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form.destination }}
+                                        <label for="destinationSelect">Or Destination</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.destination.errors }}</small>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        {{ form.num_guests }}
+                                        <label for="numGuests">Number of Travelers</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.num_guests.errors }}</small>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-floating date" id="date3" data-target-input="nearest">
+                                        {{ form.date_time }}
+                                        <label for="datetime">Travel Date & Time</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.date_time.errors }}</small>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        {{ form.special_request }}
+                                        <label for="message">Special Requests (Optional)</label>
+                                    </div>
+                                    <small class="text-danger">{{ form.special_request.errors }}</small>
+                                </div>
+
+                                <div class="col-12 mt-4">
+                                    <button class="btn btn-info w-100 py-3 text-dark fw-bold fs-5 shadow" type="submit" style="background-color: #40e0d0; border: none; border-radius: 12px;">
+                                        <i class="fa-solid fa-check-circle me-2"></i>Confirm Booking Now
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Dictionary of package pricing & availability
+    const packagePrices = {
+        {% for pkg in packages %}
+        "{{ pkg.id }}": {
+            price: {{ pkg.price|default:100 }},
+            slots: {{ pkg.available_slots|default:20 }},
+            title: "{{ pkg.title|escapejs }}"
+        },
+        {% endfor %}
+    };
+
+    function updatePrice() {
+        const pkgSelect = document.getElementById('packageSelect');
+        const numGuestsInput = document.getElementById('numGuests');
+        const priceDisplay = document.getElementById('livePriceDisplay');
+        const breakdownDisplay = document.getElementById('livePriceBreakdown');
+        const slotsDisplay = document.getElementById('liveSlotsDisplay');
+
+        const pkgId = pkgSelect ? pkgSelect.value : "";
+        const guests = parseInt(numGuestsInput && numGuestsInput.value ? numGuestsInput.value : 1, 10) || 1;
+
+        let basePrice = 250.00;
+        let availableSlots = 20;
+
+        if (pkgId && packagePrices[pkgId]) {
+            basePrice = packagePrices[pkgId].price;
+            availableSlots = packagePrices[pkgId].slots;
+        }
+
+        const total = (basePrice * guests).toFixed(2);
+
+        if (priceDisplay) {
+            priceDisplay.textContent = `$${total}`;
+        }
+        if (breakdownDisplay) {
+            breakdownDisplay.textContent = `Base price $${basePrice.toFixed(2)} × ${guests} traveler${guests > 1 ? 's' : ''}`;
+        }
+        if (slotsDisplay) {
+            slotsDisplay.innerHTML = `<i class="fa-solid fa-chair me-1"></i>${availableSlots} seats available`;
+        }
+    }
+
+    $(document).ready(function() {
+        var datetimeInput = document.getElementById('datetime');
+        if (datetimeInput && !datetimeInput.value) {
+            var now = new Date();
+            now.setDate(now.getDate() + 7);
+            datetimeInput.value = now.toISOString().slice(0, 10) + " 10:00 AM";
+        }
+
+        const pkgSelect = document.getElementById('packageSelect');
+        const numGuestsInput = document.getElementById('numGuests');
+
+        if (pkgSelect) pkgSelect.addEventListener('change', updatePrice);
+        if (numGuestsInput) numGuestsInput.addEventListener('input', updatePrice);
+
+        updatePrice();
+    });
+</script>
+{% endblock %}

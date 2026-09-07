@@ -1,0 +1,197 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Bookings - Falcon Travel{% endblock %}
+
+{% block extra_css %}
+<style>
+    .mybookings-hero {
+        padding: 140px 0 60px 0;
+        background: linear-gradient(135deg, #07222e 0%, #0b3446 60%, #154b63 100%);
+        color: #ffffff;
+    }
+
+    .booking-history-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        border: 1px solid rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .status-badge-pending {
+        background-color: #fef3c7;
+        color: #92400e;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.82rem;
+    }
+
+    .status-badge-confirmed {
+        background-color: #d1fae5;
+        color: #065f46;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.82rem;
+    }
+
+    .status-badge-completed {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.82rem;
+    }
+
+    .status-badge-cancelled {
+        background-color: #fee2e2;
+        color: #991b1b;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 0.82rem;
+    }
+
+    .filter-btn {
+        border-radius: 20px;
+        padding: 8px 18px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+        background-color: #0b3446;
+        color: #ffffff;
+    }
+
+    .filter-btn:not(.active) {
+        background-color: #ffffff;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+    }
+
+    .filter-btn:not(.active):hover {
+        background-color: #f1f5f9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="mybookings-hero">
+    <div class="container">
+        <h6 class="text-info text-uppercase fw-bold" style="letter-spacing: 2px;">Reservations</h6>
+        <h1 class="fw-bold display-5">My Travel Bookings</h1>
+        <p class="text-white-50">Review real-time status updates, trip details, and manage upcoming journeys.</p>
+    </div>
+</div>
+
+<div class="py-5" style="background-color: #f4f6f9;">
+    <div class="container">
+        <!-- Status Filter Pills -->
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            <a href="{% url 'my_bookings' %}" class="filter-btn {% if not current_status %}active{% endif %}">
+                All ({{ total_count }})
+            </a>
+            <a href="{% url 'my_bookings' %}?status=pending" class="filter-btn {% if current_status == 'pending' %}active{% endif %}">
+                Pending ({{ pending_count }})
+            </a>
+            <a href="{% url 'my_bookings' %}?status=confirmed" class="filter-btn {% if current_status == 'confirmed' %}active{% endif %}">
+                Confirmed ({{ confirmed_count }})
+            </a>
+            <a href="{% url 'my_bookings' %}?status=cancelled" class="filter-btn {% if current_status == 'cancelled' %}active{% endif %}">
+                Cancelled ({{ cancelled_count }})
+            </a>
+        </div>
+
+        <div class="booking-history-card p-4">
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="py-3">Booking Code</th>
+                            <th class="py-3">Destination / Package</th>
+                            <th class="py-3">Travel Date</th>
+                            <th class="py-3">Guests</th>
+                            <th class="py-3">Total Price</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3 text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bookings %}
+                        <tr>
+                            <td class="fw-bold" style="color: #0b3446;">
+                                <i class="fa-solid fa-ticket text-info me-2"></i>{{ b.booking_code }}
+                            </td>
+                            <td>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">
+                                        {% if b.package %}
+                                            {{ b.package.title }}
+                                        {% elif b.destination %}
+                                            {{ b.destination.name }}
+                                        {% else %}
+                                            Custom Tour
+                                        {% endif %}
+                                    </h6>
+                                    {% if b.package %}
+                                    <small class="text-muted"><i class="fa-solid fa-location-dot me-1 text-info"></i>{{ b.package.location }}</small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span>{{ b.date_time }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark border px-3 py-2 fw-bold">
+                                    <i class="fa-solid fa-user-group me-1 text-info"></i>{{ b.num_guests }}
+                                </span>
+                            </td>
+                            <td class="fw-bold text-success fs-6">
+                                ${{ b.total_price }}
+                            </td>
+                            <td>
+                                {% if b.status == 'confirmed' %}
+                                <span class="status-badge-confirmed"><i class="fa-solid fa-check-circle me-1"></i>Confirmed</span>
+                                {% elif b.status == 'completed' %}
+                                <span class="status-badge-completed"><i class="fa-solid fa-flag-checkered me-1"></i>Completed</span>
+                                {% elif b.status == 'cancelled' %}
+                                <span class="status-badge-cancelled"><i class="fa-solid fa-ban me-1"></i>Cancelled</span>
+                                {% else %}
+                                <span class="status-badge-pending"><i class="fa-solid fa-clock me-1"></i>Pending</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-end">
+                                {% if b.status != 'cancelled' and b.status != 'completed' %}
+                                <a href="{% url 'cancel_booking' b.id %}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold">
+                                    Cancel
+                                </a>
+                                {% else %}
+                                <span class="text-muted small">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fa-solid fa-suitcase-rolling fa-3x text-muted mb-3"></i>
+                <h4 class="fw-bold" style="color: #0b3446;">No Bookings Found</h4>
+                <p class="text-muted mb-4">You have not placed any travel reservations matching this filter.</p>
+                <a href="{% url 'packages' %}" class="btn btn-info text-white fw-bold rounded-pill px-4 py-2" style="background-color: #40e0d0; border: none;">
+                    Explore Packages
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
