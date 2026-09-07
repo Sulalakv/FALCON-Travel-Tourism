@@ -7,118 +7,199 @@ django.setup()
 
 from tourism.models import Destination, Package, Guide, Service
 
-print("Clearing existing records...")
-Destination.objects.all().delete()
-Package.objects.all().delete()
-Guide.objects.all().delete()
-Service.objects.all().delete()
+print("Starting safe database seeding...")
 
-print("Creating Destinations...")
-greece = Destination.objects.create(name="Greece", description="Explore beautiful beaches and ancient history.", is_popular=True)
-london = Destination.objects.create(name="London", description="Visit the iconic Big Ben, and the London Eye.", is_popular=True)
-maldives = Destination.objects.create(name="Maldives", description="Enjoy luxury resorts and azure crystal waters.", is_popular=True)
-paris = Destination.objects.create(name="Paris", description="The city of lights, romance, and incredible food.", is_popular=True)
-thailand = Destination.objects.create(name="Thailand", description="Vibrant street life, exotic beaches and ornate temples.", is_popular=True)
+# ---------------------------------------------------------
+# DESTINATIONS
+# ---------------------------------------------------------
+print("Creating/updating Destinations...")
 
-print("Creating Packages...")
-Package.objects.create(
+greece, _ = Destination.objects.update_or_create(
+    name="Greece",
+    defaults={
+        "description": "Explore beautiful beaches and ancient history.",
+        "is_popular": True,
+    }
+)
+
+london, _ = Destination.objects.update_or_create(
+    name="London",
+    defaults={
+        "description": "Visit the iconic Big Ben, and the London Eye.",
+        "is_popular": True,
+    }
+)
+
+maldives, _ = Destination.objects.update_or_create(
+    name="Maldives",
+    defaults={
+        "description": "Enjoy luxury resorts and azure crystal waters.",
+        "is_popular": True,
+    }
+)
+
+paris, _ = Destination.objects.update_or_create(
+    name="Paris",
+    defaults={
+        "description": "The city of lights, romance, and incredible food.",
+        "is_popular": True,
+    }
+)
+
+thailand, _ = Destination.objects.update_or_create(
+    name="Thailand",
+    defaults={
+        "description": "Vibrant street life, exotic beaches and ornate temples.",
+        "is_popular": True,
+    }
+)
+
+
+# ---------------------------------------------------------
+# PACKAGES
+# ---------------------------------------------------------
+print("Creating/updating Packages...")
+
+Package.objects.update_or_create(
     title="Hawak Escape",
-    description="Explore the beauty of the island for three days and 2 nights with private guide.",
-    location="Greece",
-    duration="2-4 days",
-    destination=greece,
-    image_class="img-1",
-    is_featured=True,
-    price=450.00
+    defaults={
+        "description": "Explore the beauty of the island for three days and 2 nights with private guide.",
+        "location": "Greece",
+        "duration": "2-4 days",
+        "destination": greece,
+        "image_class": "img-1",
+        "is_featured": True,
+        "price": 450.00,
+    }
 )
 
-Package.objects.create(
+Package.objects.update_or_create(
     title="London Heritage",
-    description="Immerse yourself in royal history and London culture across 5 golden days.",
-    location="United Kingdom",
-    duration="5-7 days",
-    destination=london,
-    image_class="img-2",
-    is_featured=True,
-    price=590.00
+    defaults={
+        "description": "Immerse yourself in royal history and London culture across 5 golden days.",
+        "location": "United Kingdom",
+        "duration": "5-7 days",
+        "destination": london,
+        "image_class": "img-2",
+        "is_featured": True,
+        "price": 590.00,
+    }
 )
 
-Package.objects.create(
+Package.objects.update_or_create(
     title="Parisian Romance",
-    description="Experience the Eiffel tower, Louvre museum, and world class culinary delights.",
-    location="France",
-    duration="5-7 days",
-    destination=paris,
-    image_class="img-3",
-    is_featured=True,
-    price=750.00
+    defaults={
+        "description": "Experience the Eiffel tower, Louvre museum, and world class culinary delights.",
+        "location": "France",
+        "duration": "5-7 days",
+        "destination": paris,
+        "image_class": "img-3",
+        "is_featured": True,
+        "price": 750.00,
+    }
 )
 
-Package.objects.create(
+Package.objects.update_or_create(
     title="Siam Wonders",
-    description="Vibrant night markets, exotic beaches, and majestic temple architecture.",
-    location="Thailand",
-    duration="2-4 days",
-    destination=thailand,
-    image_class="img-4",
-    is_featured=True,
-    price=320.00
+    defaults={
+        "description": "Vibrant night markets, exotic beaches, and majestic temple architecture.",
+        "location": "Thailand",
+        "duration": "2-4 days",
+        "destination": thailand,
+        "image_class": "img-4",
+        "is_featured": True,
+        "price": 320.00,
+    }
 )
 
-Package.objects.create(
+Package.objects.update_or_create(
     title="Maldives Paradise",
-    description="Overwater villa luxury stay with complimentary island cruise and snorkeling.",
-    location="Maldives",
-    duration="7+ days",
-    destination=maldives,
-    image_class="img-5",
-    is_featured=True,
-    price=690.00
+    defaults={
+        "description": "Overwater villa luxury stay with complimentary island cruise and snorkeling.",
+        "location": "Maldives",
+        "duration": "7+ days",
+        "destination": maldives,
+        "image_class": "img-5",
+        "is_featured": True,
+        "price": 690.00,
+    }
 )
 
-print("Creating Guides...")
-Guide.objects.create(
+
+# ---------------------------------------------------------
+# GUIDES
+# ---------------------------------------------------------
+print("Creating/updating Guides...")
+
+Guide.objects.update_or_create(
     name="John Doe",
-    role="Senior Expedition Coordinator",
-    image_static="img/team-1.jpg"
+    defaults={
+        "role": "Senior Expedition Coordinator",
+        "image_static": "img/team-1.jpg",
+    }
 )
-Guide.objects.create(
+
+Guide.objects.update_or_create(
     name="Jane Smith",
-    role="Cultural Liaison Expert",
-    image_static="img/team-2.jpg"
+    defaults={
+        "role": "Cultural Liaison Expert",
+        "image_static": "img/team-2.jpg",
+    }
 )
-Guide.objects.create(
+
+Guide.objects.update_or_create(
     name="Alex Johnson",
-    role="Wilderness Survival Specialist",
-    image_static="img/team-3.jpg"
+    defaults={
+        "role": "Wilderness Survival Specialist",
+        "image_static": "img/team-3.jpg",
+    }
 )
-Guide.objects.create(
+
+Guide.objects.update_or_create(
     name="Sarah Brown",
-    role="Lead Photographer & Instructor",
-    image_static="img/team-4.jpg"
+    defaults={
+        "role": "Lead Photographer & Instructor",
+        "image_static": "img/team-4.jpg",
+    }
 )
 
-print("Creating Services...")
-Service.objects.create(
+
+# ---------------------------------------------------------
+# SERVICES
+# ---------------------------------------------------------
+print("Creating/updating Services...")
+
+Service.objects.update_or_create(
     title="Cruise Ticket",
-    description="Enjoy world-class amenities and stunning views with Falcon cruise lines. Book your cruise now.",
-    image_static="public/service-1.jpg"
+    defaults={
+        "description": "Enjoy world-class amenities and stunning views with Falcon cruise lines. Book your cruise now.",
+        "image_static": "public/service-1.jpg",
+    }
 )
-Service.objects.create(
+
+Service.objects.update_or_create(
     title="Car Booking",
-    description="Affordable rates, no hidden costs. Best rental vehicle deals with daily dropoff options.",
-    image_static="public/service-2.jpg"
+    defaults={
+        "description": "Affordable rates, no hidden costs. Best rental vehicle deals with daily dropoff options.",
+        "image_static": "public/service-2.jpg",
+    }
 )
-Service.objects.create(
+
+Service.objects.update_or_create(
     title="Air Ticket",
-    description="Enjoy world-class flight amenities and global routes with Falcon partner airlines.",
-    image_static="public/service-3.jpg"
+    defaults={
+        "description": "Enjoy world-class flight amenities and global routes with Falcon partner airlines.",
+        "image_static": "public/service-3.jpg",
+    }
 )
-Service.objects.create(
+
+Service.objects.update_or_create(
     title="Hotel Booking",
-    description="Affordable rates and 5-star hotel luxury bundles. Find hotels at guaranteed low prices.",
-    image_static="public/service-4.jpg"
+    defaults={
+        "description": "Affordable rates and 5-star hotel luxury bundles. Find hotels at guaranteed low prices.",
+        "image_static": "public/service-4.jpg",
+    }
 )
 
-print("Database seeded successfully with dynamic Destinations, Packages, Guides, and Services!")
-
+print("Database seeded successfully!")
+print("Destinations, Packages, Guides, and Services are ready.")
