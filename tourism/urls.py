@@ -1,4 +1,5 @@
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 from . import auth_views
 from . import api_views
@@ -19,6 +20,10 @@ urlpatterns = [
     path('profile/', auth_views.profile_view, name='profile'),
     path('my-bookings/', auth_views.my_bookings_view, name='my_bookings'),
     path('booking/cancel/<int:booking_id>/', auth_views.cancel_booking_view, name='cancel_booking'),
+
+    # JWT Authentication
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # REST API Endpoints
     path('api/destinations/', api_views.DestinationListAPIView.as_view() if hasattr(api_views.DestinationListAPIView, 'as_view') else api_views.DestinationListAPIView, name='api_destinations_list'),
