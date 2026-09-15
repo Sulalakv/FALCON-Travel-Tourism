@@ -595,25 +595,27 @@ API documentation
 
 ## Screenshots
 
-Project screenshots can be added here as the interface continues to be improved.
+### Home Page
 
-Suggested structure:
+![FALCON Home Page](Screenshots/home.png)
 
-```text
-docs/
-└── screenshots/
-    ├── home.png
-    ├── packages.png
-    ├── booking.png
-    ├── login.png
-    ├── profile.png
-    └── api.png
-```
+### Packages
 
-Then embed them using:
+![FALCON Packages](Screenshots/packages.png)
 
-```markdown
-![FALCON Home Page](docs/screenshots/home.png)
+### Booking
+
+![FALCON Booking](Screenshots/booking.png)
+
+### Contact
+
+![FALCON Contact](Screenshots/contact.png)
+
+### Authentication
+
+![FALCON Login](Screenshots/login.png)
+
+![FALCON Registration](Screenshots/register.png)
 ```
 
 ## Future Frontend Improvements
@@ -672,3 +674,5 @@ Python Backend Developer
 - **Live Demo:** https://falcon-travel-tourism.onrender.com
 - **GitHub:** https://github.com/Sulalakv/FALCON-Travel-Tourism
 - **LinkedIn:** https://www.linkedin.com/in/khadeeja-sulala-kv-67b9223bb/
+
+
