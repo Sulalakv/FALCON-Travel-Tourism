@@ -1,4 +1,5 @@
 from django.urls import path
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
 from . import auth_views
@@ -163,4 +164,12 @@ urlpatterns = [
         else api_views.UserProfileAPIView,
         name='v1_api_user_profile'
     ),
+
+
+    # Swagger/OpenAPI
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='v1-schema'),
+    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='v1-schema'), name='v1-swagger-ui'),
 ]
