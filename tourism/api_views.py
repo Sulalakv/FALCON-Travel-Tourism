@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from .models import Destination, Package, Booking, UserProfile
 
 try:
@@ -49,7 +50,31 @@ try:
             return Booking.objects.filter(user=self.request.user)
 
         def perform_create(self, serializer):
-            serializer.save(user=self.request.user)
+            package_id = serializer.validated_data.get('package').id
+            num_guests = serializer.validated_data.get('num_guests', 1)
+
+            with transaction.atomic():
+                package = (
+                    Package.objects
+                    .select_for_update()
+                    .get(pk=package_id)
+                )
+
+            # Re-check capacity after locking the package row.
+                if num_guests > package.available_slots:
+                    from rest_framework.exceptions import ValidationError
+
+                    raise ValidationError({
+                        'num_guests': (
+                            f'Only {package.available_slots} slot(s) are '
+                            f'available for this package.'
+                        )
+                    })
+
+                serializer.save(
+                    user=self.request.user,
+                    package=package
+                )
 
 
     class BookingCancelAPIView(APIView):

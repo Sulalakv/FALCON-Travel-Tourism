@@ -48,6 +48,38 @@ try:
         package_details = PackageSerializer(source='package', read_only=True)
         destination_name = serializers.ReadOnlyField(source='destination.name')
 
+        def validate_num_guests(self, value):
+            if value < 1:
+                raise serializers.ValidationError(
+                    "Number of guests must be at least 1."
+            )
+
+            if value > 20:
+                raise serializers.ValidationError(
+                    "Number of guests cannot exceed 20."
+            )
+
+            return value
+
+        def validate(self, attrs):
+            package = attrs.get('package')
+            num_guests = attrs.get('num_guests', 1)
+
+            if not package:
+               raise serializers.ValidationError({
+                    'package': 'A package is required for booking.'
+                })
+
+            if num_guests > package.available_slots:
+                raise serializers.ValidationError({
+                      'num_guests': (
+                          f'Only {package.available_slots} slot(s) are available '
+                          f'for this package.'
+                        )
+                })
+
+            return attrs
+
         class Meta:
             model = Booking
             fields = [
