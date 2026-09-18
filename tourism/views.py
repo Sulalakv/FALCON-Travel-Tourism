@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.db import transaction
 from django.contrib import messages
 from .models import Destination, Package, Booking, ContactMessage, Guide, Service, NewsletterSubscriber
 from .forms import BookingForm, ContactForm, NewsletterForm
@@ -71,13 +72,49 @@ def booking_view(request):
         form = BookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
+
             if request.user.is_authenticated:
                 booking.user = request.user
-            booking.save()
-            messages.success(request, f"Thank you, {booking.name}! Your booking #{booking.booking_code} for {booking.destination or booking.package} (${booking.total_price}) has been received successfully.")
-            if request.user.is_authenticated:
-                return redirect('my_bookings')
-            return redirect('booking')
+
+            try:
+                with transaction.atomic():
+                    if booking.package:
+                        package = (
+                            Package.objects
+                            .select_for_update()
+                            .get(pk=booking.package.pk)
+                        )
+
+                        if booking.num_guests > package.available_slots:
+                            form.add_error(
+                                'num_guests',
+                                f"Only {package.available_slots} slot(s) are "
+                                "available for this package."
+                            )
+                            raise ValueError("Insufficient package capacity.")
+
+                        booking.package = package
+
+                    booking.save()
+
+            except ValueError:
+                messages.error(
+                    request,
+                    "The selected package does not have enough available slots."
+                )
+            else:
+                messages.success(
+                    request,
+                    f"Thank you, {booking.name}! Your booking "
+                    f"#{booking.booking_code} for "
+                    f"{booking.destination or booking.package} "
+                    f"(${booking.total_price}) has been received successfully."
+                )
+
+                if request.user.is_authenticated:
+                    return redirect('my_bookings')
+
+                return redirect('booking')
         else:
             messages.error(request, "Failed to submit booking request. Please verify the required fields.")
     else:

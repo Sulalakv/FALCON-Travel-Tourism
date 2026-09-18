@@ -147,6 +147,39 @@ class BookingForm(forms.ModelForm):
         self.fields['destination'].empty_label = "Select Destination"
         self.fields['destination'].required = False
 
+    def clean_num_guests(self):
+        num_guests = self.cleaned_data.get('num_guests')
+
+        if num_guests is None:
+            return num_guests
+
+        if num_guests < 1:
+            raise forms.ValidationError(
+                "Number of guests must be at least 1."
+            )
+
+        if num_guests > 20:
+            raise forms.ValidationError(
+                "Number of guests cannot exceed 20."
+            )
+
+        return num_guests
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        package = cleaned_data.get('package')
+        num_guests = cleaned_data.get('num_guests')
+
+        if package and num_guests:
+            if num_guests > package.available_slots:
+                self.add_error(
+                    'num_guests',
+                    f"Only {package.available_slots} slot(s) are "
+                    "available for this package."
+                )
+
+        return cleaned_data
 
 class ContactForm(forms.ModelForm):
     class Meta:
