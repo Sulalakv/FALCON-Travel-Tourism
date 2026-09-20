@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -38,7 +39,14 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
 
-    next_url = request.GET.get('next', 'home')
+    next_url = request.GET.get('next', '')
+
+    if next_url and not url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        next_url = ''
 
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
@@ -61,7 +69,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome back, {user.first_name or user.username}!")
-                return redirect(next_url if next_url else 'home')
+                return redirect(next_url or 'home')
             else:
                 messages.error(request, "Invalid username/email or password.")
     else:

@@ -10,7 +10,18 @@ try:
 
         class Meta:
             model = UserProfile
-            fields = ['phone_number', 'avatar', 'avatar_url', 'address', 'bio', 'passport_number', 'created_at']
+            fields = [
+                'phone_number',
+                'avatar',
+                'avatar_url',
+                'address',
+                'bio',
+                'passport_number',
+                'created_at'
+            ]
+            extra_kwargs = {
+                'passport_number': {'write_only': True},
+            }
 
 
     class UserSerializer(serializers.ModelSerializer):
