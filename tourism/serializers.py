@@ -88,7 +88,16 @@ try:
                 'num_guests', 'total_price', 'date_time', 'status',
                 'special_request', 'cancellation_reason', 'created_at', 'updated_at'
             ]
-            read_only_fields = ['id', 'booking_code', 'user', 'total_price', 'created_at', 'updated_at']
+            read_only_fields = [
+                'id',
+                'booking_code',
+                'user',
+                'total_price',
+                'status',
+                'cancellation_reason',
+                'created_at',
+                'updated_at'
+            ]
 
 except ImportError:
     # DRF fallback dummy classes if not installed
