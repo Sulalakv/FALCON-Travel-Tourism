@@ -191,3 +191,75 @@ class BookingAPITestCase(TestCase):
             booking.cancellation_reason,
             'Testing cancellation'
         )
+
+    def test_user_cannot_cancel_another_users_booking(self):
+        self.authenticate()
+
+        other_user = User.objects.create_user(
+            username='otheruser',
+            password='OtherPassword123!'
+        )
+
+        booking = Booking.objects.create(
+            user=other_user,
+            package=self.package,
+            name='Other User',
+            email='other@example.com',
+            num_guests=1,
+            date_time='2026-10-02 10:00'
+        )
+
+        response = self.client.post(
+            f'/api/v1/bookings/{booking.id}/cancel/',
+            {'cancellation_reason': 'Unauthorized attempt'},
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, 404)
+
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, 'pending')
+
+
+    def test_user_cannot_assign_booking_to_another_user(self):
+        self.authenticate()
+
+        other_user = User.objects.create_user(
+            username='otheruser',
+            password='OtherPassword123!'
+        )
+
+        data = self.valid_booking_data.copy()
+        data['user'] = other_user.id
+
+        response = self.client.post(
+            '/api/v1/bookings/',
+            data,
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        booking = Booking.objects.first()
+
+        self.assertEqual(booking.user, self.user)
+        self.assertNotEqual(booking.user, other_user)
+
+
+    def test_user_cannot_change_booking_status_during_creation(self):
+        self.authenticate()
+
+        data = self.valid_booking_data.copy()
+        data['status'] = 'completed'
+
+        response = self.client.post(
+            '/api/v1/bookings/',
+            data,
+            format='json'
+        )
+
+        self.assertEqual(response.status_code, 201)
+
+        booking = Booking.objects.first()
+
+        self.assertEqual(booking.status, 'pending')
